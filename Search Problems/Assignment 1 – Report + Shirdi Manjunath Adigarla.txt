@@ -1,0 +1,71 @@
+1. VISITED CHECK
+BFS
+----------------------------
+Elapsed time (s): 0.0
+Solution found at depth: 11
+Number of nodes explored: 28
+Cost of solution: 11
+Estimated effective branching factor 1.3538165566025344
+----------------------------
+
+DFS
+----------------------------
+Elapsed time (s): 0.0
+Solution found at depth: 11
+Number of nodes explored: 16
+Cost of solution: 11
+Estimated effective branching factor 1.2866648980094317
+----------------------------
+
+2. REMOVE VISITED CHECK
+BFS Statstics
+----------------------------
+Elapsed time (s): 1.328125
+Solution found at depth: 11
+Number of nodes explored: 24279
+Cost of solution: 11
+Estimated effective branching factor 2.504132732032241
+----------------------------
+
+BFS even if cyclic graph loops present unless every child node has same loops, BFS can find the path by exploring other branches. The last row [[0, 1], 'r', [3, 2]] is not connected to any other graph which resulted in path finding unlike DFS which resulted in loop
+----------------------------
+current states and successor [[0, 0], 'r', [3, 3]] [[1, 1], 'l', [2, 2]]
+current states and successor [[0, 0], 'r', [3, 3]] [[0, 2], 'l', [3, 1]]
+current states and successor [[0, 0], 'r', [3, 3]] [[0, 1], 'l', [3, 2]]
+current states and successor [[1, 1], 'l', [2, 2]] [[0, 0], 'r', [3, 3]]
+current states and successor [[1, 1], 'l', [2, 2]] [[0, 1], 'r', [3, 2]]
+current states and successor [[0, 2], 'l', [3, 1]] [[0, 0], 'r', [3, 3]]
+current states and successor [[0, 2], 'l', [3, 1]] [[0, 1], 'r', [3, 2]]
+current states and successor [[0, 1], 'l', [3, 2]] [[0, 0], 'r', [3, 3]]
+current states and successor [[0, 0], 'r', [3, 3]] [[1, 1], 'l', [2, 2]]
+current states and successor [[0, 0], 'r', [3, 3]] [[0, 2], 'l', [3, 1]]
+current states and successor [[0, 0], 'r', [3, 3]] [[0, 1], 'l', [3, 2]]
+current states and successor [[0, 1], 'r', [3, 2]] [[0, 3], 'l', [3, 0]]
+----------------------------
+
+DFS : Infinite Loop
+Getting Stuck (Undirected) in infinte loop because of no check. 
+Initially started at [[0, 0], 'r', [3, 3]]  and all succesor nodes are added
+After exploring [[1, 1], 'l', [2, 2]] it resulted back to [[0, 0], 'r', [3, 3]] initial state adding to frontier and so on it loops in the same branch unlike BFS cant explore other branches.
+
+----------------------------
+current states and successor [[0, 0], 'r', [3, 3]] [[0, 1], 'l', [3, 2]]
+current states and successor [[0, 0], 'r', [3, 3]] [[0, 2], 'l', [3, 1]]
+current states and successor [[0, 0], 'r', [3, 3]] [[1, 1], 'l', [2, 2]]
+current states and successor [[1, 1], 'l', [2, 2]] [[0, 1], 'r', [3, 2]]
+current states and successor [[1, 1], 'l', [2, 2]] [[0, 0], 'r', [3, 3]]
+current states and successor [[0, 0], 'r', [3, 3]] [[0, 1], 'l', [3, 2]]
+------
+
+3. IDS Statstics
+----------------------------
+Elapsed time (s): 0.015625
+Solution found at depth: 11
+Number of nodes explored: 100
+Cost of solution: 11
+Estimated effective branching factor 1.5199110829529336
+----------------------------
+
+
+
+
