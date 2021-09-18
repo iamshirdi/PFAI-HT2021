@@ -1,0 +1,43 @@
+class Node:
+	def a_star_successor(self):
+        successors_set = queue.PriorityQueue()
+        for action in self.state.action:
+            child = self.state.move(action)  
+                
+            if child != None:
+                # nodes away from start + heuristics
+                # Depth works in this case but should be avoided if cost is not 1. Better to use cost usually to be sure
+                h = self.depth + self.state.h_1()            
+                n = Node(child, self.cost + 1, self, action)
+                successors_set.put(PrioritizedItem(h,n))
+        return successors_set  
+
+
+
+class SearchAlgorithm:
+	
+	def a_star(self, statistics = False):
+        frontier = queue.PriorityQueue()
+        # initially any priority is given for set
+        frontier.put(PrioritizedItem(0, self.start))   
+        stop = False
+        explored=[]
+        while not stop:
+            if frontier.empty():
+                return None
+            curr_node = frontier.get().item
+            explored.append(curr_node.state.state)
+            if curr_node.goal_state():
+                stop = True 
+                #Implement Statstics function
+                if statistics:
+                    self.statistics(curr_node) 
+                return curr_node        
+                        
+            successor = curr_node.a_star_successor() 
+            while not successor.empty():
+                node_set = successor.get()
+                if node_set.item.state.state not in explored:
+                    # print("current states and successor",curr_node.state.state, node_set.item.state.state,"priority" ,node_set.priority)
+                    
+                    frontier.put(PrioritizedItem(node_set.priority , node_set.item))
