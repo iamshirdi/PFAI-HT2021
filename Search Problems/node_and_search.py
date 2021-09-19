@@ -7,6 +7,14 @@ Author: Tony Lindgren
 import queue
 # list operations are good when the operation is done at end of list
 from time import process_time
+from dataclasses import dataclass, field
+from typing import Any
+
+# (14,<obj>) (14,<obj>) are not comparable in queue because second is not string etc
+@dataclass(order=True)
+class PrioritizedItem:
+  priority: int
+  item: Any=field(compare=False)
 
 class Node:
     '''
@@ -73,6 +81,18 @@ class Node:
                 childNode = Node(child, self.cost + 1, self, action)              
                 successors.append(childNode)
         return successors  
+    
+    # Implement Greedy Search (Prioritized-low cost-ordered)
+    def greedy_successor(self):
+        successors_set = queue.PriorityQueue()
+        for action in self.state.action:
+            child = self.state.move(action)      
+            if child != None:
+                # no of tiles out of place
+                h = self.state.h_val()            
+                n = Node(child, self.cost + 1, self, action)
+                successors_set.put(PrioritizedItem(h,n))
+        return successors_set  
 
              
 class SearchAlgorithm:
@@ -81,10 +101,36 @@ class SearchAlgorithm:
     '''
     def __init__(self, problem):
         self.start = Node(problem)        
-            
+    
+    # Implement Greedy Search
+    def greedy_search(self,statistics = False):
+        frontier = queue.PriorityQueue()
+        # initially any priority is given for set
+        frontier.put(PrioritizedItem(0, self.start))   
+        stop = False
+        explored=[]
+        while not stop:
+            if frontier.empty():
+                return None
+            curr_node = frontier.get().item
+            explored.append(curr_node.state.state)
+            if curr_node.goal_state():
+                stop = True 
+                #Implement Statstics function
+                if statistics:
+                    curr_node.statistics()
+                return curr_node        
+                        
+            successor = curr_node.greedy_successor() 
+            while not successor.empty():
+                node_set = successor.get()
+                if node_set.item.state.state not in explored:
+                    # print("current states and successor",curr_node.state.state, node_set.item.state.state,"priority" ,node_set.priority)
+                    Node.search_cost+=1
+                    frontier.put(PrioritizedItem(node_set.priority , node_set.item))
+
 
     def bfs(self,statistics=False):
-        t1_start = process_time() 
         frontier = queue.Queue()
         frontier.put(self.start)
         stop = False
