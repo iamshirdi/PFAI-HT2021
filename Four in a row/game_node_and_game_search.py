@@ -34,7 +34,7 @@ class GameSearch:
     def mcts(self):                     
         start_time = process_time() 
         tree = GameNode(self.state)
-        tree.actions_left = tree.state.actions()   
+        tree.actions_left = tree.state.actions() 
         elapsed_time = 0
         while elapsed_time < self.time:   
             leaf = self.select(tree)
@@ -44,68 +44,101 @@ class GameSearch:
             stop_time = process_time()
             elapsed_time = stop_time - start_time
         move = self.actions(tree)
+
         return move
     
     def select(self, tree):
-        # if any actions left/unexplored its ucb is infinite we choose it
-        if len(tree.actions_left) > 0:
-            a = random.choice(tree.actions_left)
-            tree.actions_left.pop(a)
-            s_node = GameNode(tree.state.result(a), parent = tree)
-            tree.succesors.append(s_node)
-            return s_node
-        
-        #should not be terminal node return
-        node = None
-        ucb = float('-inf')
-        for child_gn in tree.successors:
-            ucb2 = child_gn.wins/child_gn.visits + 1.4 * ((math.log(tree.wins)/child_gn.visits)**0.5)
-            if ucb2 > ucb :
-               node = child_gn
-        return node # returns highest ucb node if not visited/explored as selected child node
+        while True:
+            # if any actions left/unexplored its ucb is infinite:visits:0 we choose it
+            if len(tree.actions_left) > 0:
+                a = random.choice(tree.actions_left)
+                tree.actions_left.remove(a)
+                s_node = GameNode(tree.state.result(a), parent = tree)
+                tree.succesors.append(s_node)
+                return s_node
+                
+            ucb = float('-inf') # can keep large negative since highest ucb outlier usually is not recommeneded
+            # as it causes more weight to that move and negative consequences - refer lecture
+            for child_gn in tree.succesors:
+                if child_gn.visits==0 or tree.wins ==0 :
+                    ucb = float('inf')
+                    node = child_gn
+                    break
+
+                ucb2 = child_gn.wins/child_gn.visits + 1.4 * ((math.log(tree.wins)/child_gn.visits)**0.5)
+                if ucb2 > ucb :
+                    ucb = ucb2
+                    node = child_gn # returns highest ucb node if not visited/explored as selected child node      
+
+            #if no more leaf nodes all exlpored and reached terminal node select highest ucb and return
+            terminal, value = node.state.is_terminal()    
+            if terminal:
+                return node
+
+            if len(node.succesors)<1:
+                node.actions_left = node.state.actions()  
+            tree = node  
 
     def expand(self, leaf):
-        if leaf.state.is_terminal:
+        terminal, value = leaf.state.is_terminal()
+        if terminal:
             return leaf
-        if len(leaf.actions_left) < 1:
-            leaf.actions_left = leaf.state.actions()   
 
-        s_node =self.select(leaf)
+        leaf.actions_left = leaf.state.actions()  
+        s_node =self.select(leaf) #selects randomly since its not expanded
         return s_node
 
     def simulate(self, child):
         while True:
-            if child.state.is_terminal:
+            terminal, value = child.state.is_terminal()
+            if terminal:
                 return child
-            if len(child.actions_left) < 1:
-                child.actions_left = child.state.actions()
-
-            child = self.select(child)
+            # Dont store or add simulated nodes
+            a = random.choice(child.state.actions())
+            child.state = child.state.result(a)
 
     def back_propagate(self, result, child):
-        if result.state.curr_move == result.state.ai_player:
+        terminal, value = result.state.is_terminal()
+        if value > 0:
             win = True
-        else:
+        elif value <0 :
             win = False
-        while child.parent != None: #even middle state tree parent is None when initalized
+        
+        if value == 0:
+            return  # dont add visits or wins : will it return same move ?
+            
+        if child == child.parent: #terminal selection if no more leafs
+            child = child.parent
+
+        if child.state.curr_move != child.state.ai_player:
+            win = not win
+
+        # from child node update visits,wins
+        while True:
             child.visits +=1
             if win:
                 child.wins +=1
-            win = not win
+
+            if child.parent==None:
+                break
             child = child.parent
+            win = not win
+
 
     def actions(self, tree):
         node = None # terminal node must not be
         ucb = float('-inf')
-        for child_gn in tree.successors:
-            ucb2 = child_gn.wins/child_gn.visits + 1.4 * ((math.log(tree.wins)/child_gn.visits)**0.5)
-           #incase initial selection is not done check if no wins
-            if (child_gn.wins or tree.wins ==0) and child_gn.visits==0:
-                if ucb2 > ucb :
-                    node = child_gn
+        for s in tree.succesors:
+            # #incase initial selection is not done add check for wins only
+            # if child_gn.visits!=0 and tree.wins !=0 :
+            ucb2 = s.wins/s.visits + 1.4 * ((math.log(tree.wins)/s.visits)**0.5)
+            if ucb2 > ucb :
+                ucb = ucb2
+                node = s
+       
         #since we did not keep track of move for a action in node
         for a in tree.state.actions():
-            if node.state == tree.state.result(a):
+            if node.state.board == tree.state.result(a).board:
                 return a
     
     def minimax_search(self): 

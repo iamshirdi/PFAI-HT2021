@@ -1,0 +1,5 @@
+1. Coulmns are choosen because they are the only playable actions possible by any player when playing the game. Playable from top of board when the column is not empty. Total 7 columns, so easier adding to list and they are in sequence. Easier to define in linked lists with these features
+2. Min-max is a recurssive function in which it keeps track of every score after reaching stopping condition or heursistic/depth reached. There is no additional calculation involved so doesnt need to keep track of nodes since it just uses scores and no other attributes of node. The calculation (min-max) is also done on the same level and carried backward 
+3. Due to alpha-beta pruning it plays better because it has more time to search all available states if there is more time etc and its way faster for given time/depth compared to min-max.
+4. Without heursitic function it chooses always the first node as default while heuristic chooses middle as more preference. This makes the game play better even with less depth since there are lot of space/positions(positive/negative/horizontal/vertical ) to win in middle in shorter time/depth 
+5. 
