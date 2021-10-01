@@ -32,8 +32,6 @@ class FourInARow:
                 rows_columns.append(c) 
         return rows_columns
         
-
-
     def result(self, action):                    
         dc = deepcopy(self)
         if self.to_move() == 'w':
@@ -109,12 +107,12 @@ class FourInARow:
         #check negative diagonal 
         #TODO   
         for c in range(4):
-            for r in range(2,-1,-1):
-                if len(self.board[c]) > 6- r and len(self.board[c+1]) >6-r-1 and len(self.board[c+2]) > 6-r-2 and len(self.board[c+3]) > 6-r-3:
-                    if self.ai_player == self.board[c][6-r-1] and self.ai_player == self.board[c+1][6-r-2] and self.ai_player == self.board[c+2][6-r-3] and self.ai_player == self.board[c+3][6-r-4]:  
+            for r in range(3,6):
+                if len(self.board[c]) > r and len(self.board[c+1]) >r-1 and len(self.board[c+2]) > r-2 and len(self.board[c+3]) > r-3:
+                    if self.ai_player == self.board[c][r] and self.ai_player == self.board[c+1][r-1] and self.ai_player == self.board[c+2][r-2] and self.ai_player == self.board[c+3][r-3]:  
                         # print('Found negative diagonal win')
                         return True, 1000
-                    elif self.ai_player == self.board[c][6-r-1] and self.ai_player == self.board[c+1][6-r-2] and self.ai_player == self.board[c+2][6-r-3] and self.ai_player == self.board[c+3][6-r-4]:  
+                    elif  self.ai_player != self.board[c][r] and self.ai_player != self.board[c+1][r-1] and self.ai_player != self.board[c+2][r-2] and self.ai_player != self.board[c+3][r-3]:  
                         # print('Found negative diagonal loss')
                         return True, -1000
 

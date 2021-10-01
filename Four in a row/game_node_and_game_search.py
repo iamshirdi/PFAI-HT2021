@@ -50,12 +50,8 @@ class GameSearch:
     def select(self, tree):
         while True:
             # if any actions left/unexplored its ucb is infinite:visits:0 we choose it
-            if len(tree.actions_left) > 0:
-                a = random.choice(tree.actions_left)
-                tree.actions_left.remove(a)
-                s_node = GameNode(tree.state.result(a), parent = tree)
-                tree.succesors.append(s_node)
-                return s_node
+            if len(tree.actions_left) >0:
+                return tree
                 
             ucb = float('-inf') # can keep large negative since highest ucb outlier usually is not recommeneded
             # as it causes more weight to that move and negative consequences - refer lecture
@@ -77,25 +73,27 @@ class GameSearch:
 
             if len(node.succesors)<1:
                 node.actions_left = node.state.actions()  
-            tree = node  
+            tree = node
 
     def expand(self, leaf):
         terminal, value = leaf.state.is_terminal()
         if terminal:
             return leaf
-
-        leaf.actions_left = leaf.state.actions()  
-        s_node =self.select(leaf) #selects randomly since its not expanded
+        a = random.choice(leaf.actions_left)
+        leaf.actions_left.remove(a)
+        s_node = GameNode(leaf.state.result(a), parent = leaf)
+        leaf.succesors.append(s_node)
         return s_node
 
     def simulate(self, child):
-        while True:
-            terminal, value = child.state.is_terminal()
-            if terminal:
-                return child
-            # Dont store or add simulated nodes
-            a = random.choice(child.state.actions())
-            child.state = child.state.result(a)
+        terminal, value = child.state.is_terminal()
+        if terminal:
+            return child
+        # Dont store or add simulated nodes
+        a = random.choice(child.state.actions())
+        s_node = GameNode(child.state.result(a), parent = child)
+        r = self.simulate(s_node)
+        return r
 
     def back_propagate(self, result, child):
         terminal, value = result.state.is_terminal()
@@ -107,10 +105,11 @@ class GameSearch:
         if value == 0:
             return  # dont add visits or wins : will it return same move ?
             
-        if child == child.parent: #terminal selection if no more leafs
-            child = child.parent
+        # if child == child.parent: #terminal selection if no more leafs
+        #     child = child.parent
 
-        if child.state.curr_move != child.state.ai_player:
+        #this indicates that its human turn
+        if child.state.curr_move == child.state.ai_player:
             win = not win
 
         # from child node update visits,wins
@@ -133,9 +132,9 @@ class GameSearch:
             # if child_gn.visits!=0 and tree.wins !=0 :
             ucb2 = s.wins/s.visits + 1.4 * ((math.log(tree.wins)/s.visits)**0.5)
             if ucb2 > ucb :
+                print(s.state.board, ucb2)
                 ucb = ucb2
                 node = s
-       
         #since we did not keep track of move for a action in node
         for a in tree.state.actions():
             if node.state.board == tree.state.result(a).board:
