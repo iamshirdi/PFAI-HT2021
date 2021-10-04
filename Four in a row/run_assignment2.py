@@ -8,10 +8,10 @@ from game_node_and_game_search import GameSearch
 
     
 def ask_ai(state0):
-    gs = GameSearch(state0, depth=3, time=1)
-    move = gs.minimax_search()
     # gs = GameSearch(state0, depth=3, time=1)
-    # move = gs.mcts()
+    # move = gs.minimax_search()
+    gs = GameSearch(state0, depth=3, time=2)
+    move = gs.mcts()
     print("move...", move)
     state1 = state0.result(move)
 
@@ -26,8 +26,10 @@ def ask_ai(state0):
     if stop == True:
         if value > 0:
             print('AI won')                       
-        else:
+        elif value < 0:
             print('Human won')
+        else:
+            print('Draw')
         return state1, True
     return state1, False 
  
@@ -35,7 +37,12 @@ def ask_player(state):
     # Tdo: Invalid inputs like >,'str' etc not be accepted
     stop = False
     while not stop:
-        action = int(input('Enter valid empty column from 0 to 6: ') )
+        try:
+            action = int(input('Enter valid empty column from 0 to 6: ') )
+        except ValueError:
+            print("invalid input")
+            continue
+
         if -1 < action <7:
             if len(state.board[action]) < 6:
                 stop = True

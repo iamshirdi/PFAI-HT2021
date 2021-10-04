@@ -1,17 +1,12 @@
 Part A:
 
 1. Coulmns are choosen because they are the only playable actions possible by any player when playing the game. Playable from top of board when the column is not empty. 
-Total 7 columns, so easier adding to list and they are in sequence. Easier to define in linked lists with these features.
-2. Min-max is a recurssive function in which it keeps track of every score after reaching stopping condition or heursistic/depth reached. 
-There is no additional calculation involved so doesnt need to keep track of nodes since it just uses scores and no other attributes of node. 
-The calculation (min-max) is also done on the same level and carried backward 
-3. Due to alpha-beta pruning it plays better because it has more time to search all available states if there is more time etc and its way faster for given time/depth compared to min-max.
-4. Without heursitic function it chooses always the first node as default while heuristic chooses middle as more preference. 
-This makes the game play better even with less depth since there are lot of space/positions(positive/negative/horizontal/vertical ) to win in middle in shorter time/depth.
-5. Both MCTS and minimax play about the same, they block moves and feel like they think. The diffrence that can be noticed is that MCTS is playing more tactical? What we mean with this is 
-that it does not have the same focus to play only more in the middle and it feels like it thinks more about the generall state of the board. This is probably thanks to the simulations
-it does that helps it to explore many nodes and play other moves.
-
+Total 7 columns, so easier adding to list and they are in sequence. Easier to define in nested lists with these features
+2. Game Node: Min-max is a recurssive function in which it keeps track of every score after reaching stopping condition or heursistic/depth reached. There is no additional calculation involved so doesnt need to keep track of nodes since it just uses scores and no other attributes of node. The calculation (min-max) is also done on the same level and carried backward 
+3. Due to alpha-beta pruning it plays better because it has more time to search all available states if there is more time etc and its way faster for given time/depth compared to min-max without any tradeoff.
+4. Without heursitic function it chooses always the first node as default while heuristic chooses middle as more preference. This makes the game play better even with less depth since there are lot of space/positions(positive/negative/horizontal/vertical ) to win in middle in shorter time/depth 
+5. Monte carlo does not require proper heuristic so its playing better(high simulations random) but with good heuristic(ideally not possible especially for large games) min-max may outperform monte carlo. Min-max is deviating from immediate win because of heuristic
+6. Usually we implement 0.5 chance,1 visit since win and loss are 1,0. But not counting draw and always aiming for winning is preffered otherwise AI becomes biased and may prefer draw over win
 
 
 

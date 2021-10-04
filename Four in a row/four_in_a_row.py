@@ -45,13 +45,14 @@ class FourInARow:
     #eval
     #TODO
     def utility(self, state):
+        #Todo: Maybe Give more score/preference to empty instead of almost full for faster goal state: horizontal/diagnoal
         #edges : low score 
         for i in range(3):
             v = (2**i) * len(state[i])    #first 0,1,2
             v += (2**i) * len(state[6-i]) #last 6,5,4
 
         #middle score
-        v += (2**3) * len(state[3])
+        v += (6) * len(state[3])
         return v
         
     def is_terminal(self):
@@ -68,7 +69,8 @@ class FourInARow:
                 if count == 4:
                     if self.ai_player == curr_chip:        
                         # print('Found vertical win')
-                        return True, 1000          #MAX ai wins positive utility
+                        # 1000,2000 etc : may cause overweighing weight heurisitic of one particular action
+                        return True, 1000          #MAX ai wins positive utility 
                     else:
                         # print('Found vertical loss')
                         return True, -1000         #MIN player wins negative utility
@@ -127,9 +129,8 @@ class FourInARow:
                 return True, 0
             col+=1
             
-        # TODO default 0 return utlity
+        # if no terminal returns utility : if terminal-max value :should superceed utility    
         u_value = self.utility(self.board)  
-        # return False, 0                                       
         return False, u_value                
 
 

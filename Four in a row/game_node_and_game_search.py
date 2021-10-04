@@ -89,7 +89,7 @@ class GameSearch:
         terminal, value = child.state.is_terminal()
         if terminal:
             return child
-        # Dont store or add simulated nodes
+        # Dont store or add simulated nodes (why ? does it not reduce computations etc)
         a = random.choice(child.state.actions())
         s_node = GameNode(child.state.result(a), parent = child)
         r = self.simulate(s_node)
@@ -102,13 +102,13 @@ class GameSearch:
         elif value <0 :
             win = False
         
+        #Todo : if draw 0.5 but win should be preffered otherwise draw superceeds winning chance
+        # Will not work without heuristic :especially negative addition heuristic
         if value == 0:
             return  # dont add visits or wins : will it return same move ?
             
-        # if child == child.parent: #terminal selection if no more leafs
-        #     child = child.parent
 
-        #this indicates that its human turn
+        #This indicates that its human turn
         if child.state.curr_move == child.state.ai_player:
             win = not win
 
@@ -128,11 +128,11 @@ class GameSearch:
         node = None # terminal node must not be
         ucb = float('-inf')
         for s in tree.succesors:
-            # #incase initial selection is not done add check for wins only
+            # #incase initial selection:way less time etc is not done add check for wins only
             # if child_gn.visits!=0 and tree.wins !=0 :
             ucb2 = s.wins/s.visits + 1.4 * ((math.log(tree.wins)/s.visits)**0.5)
             if ucb2 > ucb :
-                print(s.state.board, ucb2)
+                # print(s.state.board, ucb2)
                 ucb = ucb2
                 node = s
         #since we did not keep track of move for a action in node
