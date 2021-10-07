@@ -48,12 +48,50 @@ influence(hogwarts, cedric_diggory).
 influence(hogwarts, draco_malfoy).
 
 % trans_influence(X, Y) X influnces Y through some other object Z
-
+trans_influence(X,Y):-  influence(X,Z), influence(Z,Y).
+        
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Part 2: Define set and handle terms
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Define predicates to handle sets 
+m_member(X,[X|_]).
+m_member(X,[_|Y]) :-
+        m_member(X,Y).
+
+to_set([],[]).
+to_set([X|Y], S):- 
+        m_member(X,Y), 
+        !, 
+        to_set(Y,S).
+to_set([X|Y],[X|Z]):-
+        to_set(Y,Z).
+
+union([],Z,Z).
+union([X|Y],Z,W):-
+        m_member(X,Z), 
+       % !,
+        union(Y,Z,W).
+union([X|Y],Z,[X|W]):-
+        \+m_member(X,Z), 
+        union(Y,Z,W).  
+
+intersection([],_,[]).
+intersection([X|Y],Z,[X|W]) :-
+        m_member(X,Z), 
+        intersection(Y,Z,W).
+intersection([X|Y],Z,W) :-
+        \+ m_member(X,Z), 
+        intersection(Y,Z,W).
+
+diff(X,Y,Z):-
+        findall(W,(m_member(W,X),\+(m_member(W,Y))),Z).        
+
+
+subset([],_).
+subset([X|L],K):-
+        m_member(X,K), 
+        subset(L,K).
 
 % Define predicate that computes the syntactic complexity  
 
