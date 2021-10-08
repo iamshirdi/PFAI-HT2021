@@ -13,8 +13,9 @@ L = [draco_malfoy]
 5. | ?- trans_influence(X,X), X=X.
 X = harry_potter ?
 
-6. | ?- trans_influence(X,Y), loyalty(Y,\+X),X=X, Y=Y.
-no
+6. | ?- trans_influence(X,Y), \+loyalty(Y,X), Y\==X.
+X = cedric_diggory,
+Y = harry_potter ? 
 
-7. | ?- trans_influence(X,Y), loyalty(Y,X),X=X, Y=Y.
+7. trans_influence(X,Y), loyalty(Y,X), Y\==X.
 no
