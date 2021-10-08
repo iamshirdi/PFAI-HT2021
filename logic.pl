@@ -67,24 +67,37 @@ to_set([X|Y], S):-
 to_set([X|Y],[X|Z]):-
         to_set(Y,Z).
 
-union([],Z,Z).
-union([X|Y],Z,W):-
+union(X,Y,Zset):-
+        to_set(X, Xset),
+        to_set(Y, Yset),
+        m_union(Xset,Yset,Zset).
+m_union([],Z,Z).
+m_union([X|Y],Z,W):-
         m_member(X,Z), 
        % !,
-        union(Y,Z,W).
-union([X|Y],Z,[X|W]):-
+        m_union(Y,Z,W).
+m_union([X|Y],Z,[X|W]):-
         \+m_member(X,Z), 
-        union(Y,Z,W).  
+        m_union(Y,Z,W).  
 
-intersection([],_,[]).
-intersection([X|Y],Z,[X|W]) :-
+intersection(X,Y,Zset):-
+        to_set(X, Xset),
+        to_set(Y, Yset),
+        m_intersection(Xset, Yset, Zset).
+m_intersection([],_,[]).
+m_intersection([X|Y],Z,[X|W]) :-
         m_member(X,Z), 
-        intersection(Y,Z,W).
-intersection([X|Y],Z,W) :-
+        m_intersection(Y,Z,W).
+m_intersection([X|Y],Z,W) :-
         \+ m_member(X,Z), 
-        intersection(Y,Z,W).
+        m_intersection(Y,Z,W).
 
-diff(X,Y,Z):-
+diff(X,Y,Zset):-
+        to_set(X,Xset),
+        to_set(Y,Yset),
+        m_diff(Xset,Yset,Zset).
+        
+m_diff(X,Y,Z):-
         findall(W,(m_member(W,X),\+(m_member(W,Y))),Z).        
 
 
