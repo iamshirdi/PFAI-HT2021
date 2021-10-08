@@ -15,8 +15,8 @@ Part B:
 | ?- zebra.
 house 1        house 2        house 3        house 4        house 5
 1-yellow       2-blue         3-red          4-green        5-white
-1-norwegian    2-dane         3-english      4-swede        5-german
-1-dunhill      2-blend        3-pall_mall    4-blue_master  5-prince
-1-water        2-tea          3-milk         4-beer         5-coffee
-1-cats         2-horse        3-birds        4-dog          5-zebra
+1-norwegian    2-dane         3-english      4-german       5-swede
+1-dunhill      2-blend        3-pall_mall    4-prince       5-blue_master
+1-water        2-tea          3-milk         4-coffee       5-beer
+1-cats         2-horse        3-birds        4-zebra        5-dog
 yes
