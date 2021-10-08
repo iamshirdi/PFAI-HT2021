@@ -107,7 +107,9 @@ subset([X|L],K):-
         subset(L,K).
 
 % Define predicate that computes the syntactic complexity  
-
+% We need to to find how complex the term is.
+% recursive is a good way to do and have 2 stops when the conditions are fullfilled.
+% Ad a temporary counter in the middle that ads upp when terms apply and then copy to the variable Complexity at the end (Hide complexity during proces)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Part 3: Monkey and banana
