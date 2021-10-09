@@ -20,7 +20,7 @@ zebra:-
         domain(Nationality, 1, 5),
        
         % Define constraints and relations
-        all_different(House_colors),
+        all_different(House_colors), % Conjuction:AND
         all_different(Pet),
         all_different(Smokes),
         all_different(Drinks),
@@ -29,11 +29,12 @@ zebra:-
         Swede #= Dog,  
         Dane #= Tea,
         Green #= White - 1, 
+        Coffee #= Green,
         Pall_mall #= Birds,
         Yellow #= Dunhill,
         Milk #= 3,
         Norwegian #= 1,
-        Blend #= Cats +1 #\/ Blend #= Cats - 1,
+        Blend #= Cats +1 #\/ Blend #= Cats - 1, %Can be either side so OR \/
         Dunhill #= Horse + 1 #\/ Dunhill #= Horse - 1,
         Blue_master #= Beer,
         German #= Prince,
@@ -48,7 +49,10 @@ zebra:-
         append(Temp3, Smokes, VariableList),
         
         % find solution
-        labeling([], VariableList),                                           
+        labeling([], VariableList),
+        write('variable List is'),
+        write(VariableList),
+        nl,                                           
        
         % connect answers with right objects
         sort([Red-red, Green-green, White-white, Yellow-yellow, Blue-blue], House_color_connection),
