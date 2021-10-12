@@ -173,7 +173,7 @@ solve(State, Goal, Plan, RPlan):-
 %op(swing(stick) - define this operator
 op(swing(stick),
         [on(monkey,box), at(box, X), at(bananas, X), holding(monkey,stick)],
-        [at(floor,bananas), at(floor, monkey)],
+        [at(bananas, floor), at(monkey, floor)],
         [holding(monkey,bananas)]).
 
 op(grab(stick),
