@@ -171,6 +171,10 @@ solve(State, Goal, Plan, RPlan):-
 % 4th arg = add list.
 
 %op(swing(stick) - define this operator
+op(swing(stick),
+   [on(monkey,box), at(box, X), at(bananas, X), holding(monkey,stick)],
+   [at(floor,bananas), at(floor, monkey)],
+   [holding(monkey,bananas)]).
 
 op(grab(stick),
         [at(monkey,X), at(stick, X), on(monkey,floor)],
@@ -178,9 +182,16 @@ op(grab(stick),
         [holding(monkey,stick)]).
 
 %op(climbon(box) - define this operator
-       
+op(climbon(box),
+   [at(monkey,X), at(box,X), on(monkey,floor), on(box,floor)],
+   [on(monkey,floor)],
+   [on(monkey,box)]).       
 
 %op(push(box,X,Y) - define this operator
+op(push(box,X,Y),
+   [at(monkey,X), at(box,X), on(monkey,floor),(box,floor)],
+   [at(monkey,X), at(box,X)],
+   [at(monkey,Y), at(box,Y)]).
 
 op(go(X,Y),
         [at(monkey,X), on(monkey,floor)],
