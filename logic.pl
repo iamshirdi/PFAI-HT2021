@@ -177,9 +177,9 @@ op(swing(stick),
    [holding(monkey,bananas)]).
 
 op(grab(stick),
-        [at(monkey,X), at(stick, X), on(monkey,floor)],
-        [at(stick, X)],
-        [holding(monkey,stick)]).
+   [at(monkey,X), at(stick, X), on(monkey,floor)],
+   [at(stick, X)],
+   [holding(monkey,stick)]).
 
 %op(climbon(box) - define this operator
 op(climbon(box),
