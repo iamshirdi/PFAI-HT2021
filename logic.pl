@@ -1,8 +1,6 @@
 /* -*- Mode:Prolog; coding:iso-8859-1; indent-tabs-mode:nil; prolog-indent-width:8; prolog-paren-indent:4; tab-width:8; -*- 
 Logic Assignment
-
 Author: Tony Lindgren
-
 */
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -131,26 +129,29 @@ start(Plan):-
 
 solve(State, Goal, Sofar, Plan):-
         op(Op, Preconditions, Delete, Add),
-        % Check if an operator can be utilized or not
+        % Check if an operator can be utilized or not  // titta om precondtions för op är uppfylda
         % your_name(Preconditions, State)
+        subset(Preconditions, State),
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Define a predicate that becomes true if:  
+        % Define a predicate that becomes true if:  %% Question to Tony do you mean a predicate here or can i use m_member just to check? Is Yes and No considered true/false?
         %       all members of Preconditions are part of current State (State) 
         % and return false otherwise
+        m_member(Preconditions, Sofar),
     
-        % Test to avoid using the operator multiple times 
+        % Test to avoid using the operator multiple times %% What should this do? Is this correct?
         % (To avoid infinite loops, in more comlex problems this is often implemented via states)
         % your_name(Op, Sofar)
+        m_member(Op, Sofar),
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Define a predicate that checks if Op has been done before
+        % Define a predicate that checks if Op has been done before %% Is this a part of the assignment above? How to break a loop if part of it?
         % if so the predicate should fail otherwise be true 
         
-        % First half of applying an operator  
+        % First half of applying an operator  %% Is this with the things bellow? or is this a separete one, if so what is the one bellow?
         % your_name(State, Delete, Remainder),
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Define a predicate that removes all members of the Delete list 
         % from the state and the results are returned in the Reminder 
-        
+        diff(State, Delete, Remainder),
         append(Add, Remainder, NewState),
         % Useful for debugging (de-comment to see output) 
         %format('Operator:~w ~N', [Op]),    
@@ -159,9 +160,14 @@ solve(State, Goal, Sofar, Plan):-
 
 solve(State, Goal, Plan, RPlan):-
         %add a check if State is a subset of Goal here 
+        subset(State,Goal),
         reverse(Plan,RPlan).
 
 %reverse(Plan,RPlan) - define this predicate which returns a reversed list
+reverse([], Z, Z).
+reverse([X|Y], Z, W):-
+        reverse(Y, Z, [X| W]).
+        
 
         
 % The operators take 4 arguments
@@ -173,8 +179,8 @@ solve(State, Goal, Plan, RPlan):-
 %op(swing(stick) - define this operator
 op(swing(stick),
         [on(monkey,box), at(box, X), at(bananas, X), holding(monkey,stick)],
-        [at(bananas, floor), at(monkey, floor)],
-        [holding(monkey,bananas)]).
+        [on(monkey,box), holding(monkey,stick)],
+        [at(bananas, floor), at(monkey, floor)]).
 
 op(grab(stick),
         [at(monkey,X), at(stick, X), on(monkey,floor)],
