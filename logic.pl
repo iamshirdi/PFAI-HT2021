@@ -133,20 +133,20 @@ solve(State, Goal, Sofar, Plan):-
         % your_name(Preconditions, State)
         subset(Preconditions, State),
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Define a predicate that becomes true if:  %% Question to Tony do you mean a predicate here or can i use m_member just to check? Is Yes and No considered true/false?
+        % Define a predicate that becomes true if: 
         %       all members of Preconditions are part of current State (State) 
         % and return false otherwise
-        m_member(Preconditions, Sofar),
+        
     
         % Test to avoid using the operator multiple times %% What should this do? Is this correct?
         % (To avoid infinite loops, in more comlex problems this is often implemented via states)
         % your_name(Op, Sofar)
-        m_member(Op, Sofar),
+        m_member(Op, Sofar), %% Gör om till wraper så att den kan ta in båda listorna. FIX THIS!!!!
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Define a predicate that checks if Op has been done before %% Is this a part of the assignment above? How to break a loop if part of it?
+        % Define a predicate that checks if Op has been done before 
         % if so the predicate should fail otherwise be true 
         
-        % First half of applying an operator  %% Is this with the things bellow? or is this a separete one, if so what is the one bellow?
+        % First half of applying an operator  
         % your_name(State, Delete, Remainder),
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Define a predicate that removes all members of the Delete list 
