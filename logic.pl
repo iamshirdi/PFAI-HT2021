@@ -129,7 +129,7 @@ start(Plan):-
 
 solve(State, Goal, Sofar, Plan):-
         op(Op, Preconditions, Delete, Add),
-        % Check if an operator can be utilized or not  // titta om precondtions för op är uppfylda
+        % Check if an operator can be utilized or not 
         % your_name(Preconditions, State)
         subset(Preconditions, State),
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -138,10 +138,10 @@ solve(State, Goal, Sofar, Plan):-
         % and return false otherwise
         
     
-        % Test to avoid using the operator multiple times %% What should this do? Is this correct?
+        % Test to avoid using the operator multiple times
         % (To avoid infinite loops, in more comlex problems this is often implemented via states)
         % your_name(Op, Sofar)
-        m_member(Op, Sofar), %% Gör om till wraper så att den kan ta in båda listorna. FIX THIS!!!!
+        check_list(Op, Sofar), %% Gör om till wraper så att den kan ta in båda listorna. FIX THIS!!!!
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Define a predicate that checks if Op has been done before 
         % if so the predicate should fail otherwise be true 
@@ -167,8 +167,10 @@ solve(State, Goal, Plan, RPlan):-
 reverse([], Z, Z).
 reverse([X|Y], Z, W):-
         reverse(Y, Z, [X| W]).
-        
-
+check_list([],_).        
+check_list([X|Y], Z):-
+        check_list(Y, Z), 
+        m_member(X, Z).
         
 % The operators take 4 arguments
 % 1st arg = name
