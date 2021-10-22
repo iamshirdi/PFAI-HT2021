@@ -1,0 +1,11 @@
+3b
+1. To make it intersect with optimal/permisstic - find solution we change Taxi effect having cash and also in problem we remove final state having cash as requirement
+2. Two transports to SFO through taxi or Metro.
+Final state must have cash or initially no cash so that we can choose metro transport instead of taxi and different HLA actions as described in code/library.
+Go to Metro station take metro1 or metro2 to SFO. If cash available or not a requirement to preserve in final state taxi is choosen
+
+Example2: Output
+Do planning
+plan....................................... HLA  [Bus(Home, MetroStop), Metro1(MetroStop, SFO)]
+Final plan
+[{'name': 'Bus', 'args': (Home, MetroStop), 'precond': [At(Home)], 'effect': [At(MetroStop), NotAt(Home)], 'domain': None, 'duration': 0, 'consumes': {}, 'uses': {}, 'completed': False}, {'name': 'Metro1', 'args': (MetroStop, SFO), 'precond': [At(MetroStop)], 'effect': [At(SFO), NotAt(MetroStop)], 'domain': None, 'duration': 0, 'consumes': {}, 'uses': {}, 'completed': False}]
