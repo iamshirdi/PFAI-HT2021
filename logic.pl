@@ -109,18 +109,27 @@ subset([X|L],K):-
 % recursive is a good way to do and have 2 stops when the conditions are fullfilled.
 % Ad a temporary counter in the middle that ads upp when terms apply and then copy to the variable Complexity at the end (Hide complexity during proces)
 
-syntactic_complexity([], -1).
-syntactic_complexity(V, 0):-
-       functor(V, _, 0).       %if condition true then 0 returns 
+% checks for non variable terms and increases/add 1
+len_nv([],0).
+len_nv([Head|Tail],N):- nonvar(Head),len_nv(Tail,N1), N is N1+1.
+len_nv([Head|Tail],N):- var(Head),len_nv(Tail,N1), N is N1.
+
+syntactic_complexity([], 1).
+syntactic_complexity(V, 2):-
+       functor(V, _, 0).       % if condition true then 2 returns since only complext term in functor 
 syntactic_complexity(V,Complexity) :- 
-        nonvar(V), %checks if not variable else unifies and returns 1.exit
-        functor(V, _, A), 
+        nonvar(V), % checks if not variable else unifies and returns 1.exit
+        functor(V, _, A),
         V =.. [H|[H2|T2]],write('......'),write(H2),
-        syntactic_complexity(H2, NX), Complexity is NX+A+2.
+        len_nv([H|T2],N),
+        syntactic_complexity(H2, NX), Complexity is NX+A+N.
+
 
 %Example outputs
 % syntactic_complexity(f(g(h,X),Y),Complexity). is 8
 % syntactic_complexity(f(g(H,X),Y),Complexity). is 7
+% syntactic_complexity(loyalty(a,N),Complexity) is 5
+% syntactic_complexity(loyalty(a,b),Complexity) is 6
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Part 3: Monkey and banana
