@@ -109,7 +109,7 @@ subset([X|L],K):-
 % recursive is a good way to do and have 2 stops when the conditions are fullfilled.
 % Ad a temporary counter in the middle that ads upp when terms apply and then copy to the variable Complexity at the end (Hide complexity during proces)
 
-syntactic_complexity([], 1).
+syntactic_complexity([], -1).
 syntactic_complexity(V, 0):-
        functor(V, _, 0).       %if condition true then 0 returns 
 syntactic_complexity(V,Complexity) :- 
@@ -120,7 +120,7 @@ syntactic_complexity(V,Complexity) :-
 
 %Example outputs
 % syntactic_complexity(f(g(h,X),Y),Complexity). is 8
-% syntactic_complexity(f(g(H,X),Y),Complexity). is 9
+% syntactic_complexity(f(g(H,X),Y),Complexity). is 7
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Part 3: Monkey and banana
