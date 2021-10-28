@@ -105,9 +105,7 @@ subset([X|L],K):-
         subset(L,K).
 
 % Define predicate that computes the syntactic complexity  
-% We need to to find how complex the term is.
-% recursive is a good way to do and have 2 stops when the conditions are fullfilled.
-% Ad a temporary counter in the middle that ads upp when terms apply and then copy to the variable Complexity at the end (Hide complexity during proces)
+
 
 % checks for non variable terms and increases/add 1
 len_nv([],0).
@@ -163,7 +161,8 @@ solve(State, Goal, Sofar, Plan):-
         % Test to avoid using the operator multiple times
         % (To avoid infinite loops, in more comlex problems this is often implemented via states)
         % your_name(Op, Sofar)
-        check_list(Op, Sofar), %% Gör om till wraper så att den kan ta in båda listorna. FIX THIS!!!!
+        %check_list(Op, Sofar), %% Gör om till wraper så att den kan ta in båda listorna. FIX THIS!!!!
+        \+ m_member(Op, Sofar),
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Define a predicate that checks if Op has been done before 
         % if so the predicate should fail otherwise be true 
@@ -176,8 +175,8 @@ solve(State, Goal, Sofar, Plan):-
         diff(State, Delete, Remainder),
         append(Add, Remainder, NewState),
         % Useful for debugging (de-comment to see output) 
-        %format('Operator:~w ~N', [Op]),    
-        %format('NewState:~w ~N', [NewState]),
+        format('Operator:~w ~N', [Op]),    
+        format('NewState:~w ~N', [NewState]),
         solve(NewState, Goal, [Op|Sofar], Plan).
 
 solve(State, Goal, Plan, RPlan):-
@@ -189,6 +188,7 @@ solve(State, Goal, Plan, RPlan):-
 reverse([], Z, Z).
 reverse([X|Y], Z, W):-
         reverse(Y, Z, [X| W]).
+
 check_list([],_).        
 check_list([X|Y], Z):-
         check_list(Y, Z), 
@@ -202,9 +202,9 @@ check_list([X|Y], Z):-
 
 %op(swing(stick) - define this operator
 op(swing(stick),
-        [on(monkey,box), at(box, X), at(bananas, X), holding(monkey,stick)],
-        [on(monkey,box), holding(monkey,stick)],
-        [at(bananas, floor), at(monkey, floor)]).
+        [on(monkey,box), at(box, X), at(bananas, X), holding(monkey,stick), status(bananas, hanging)],
+        [status(bananas, hanging)],
+        [status(bananas, grabbed)]).
 
 op(grab(stick),
         [at(monkey,X), at(stick, X), on(monkey,floor)],
@@ -219,7 +219,7 @@ op(climbon(box),
 
 %op(push(box,X,Y) - define this operator
 op(push(box,X,Y),
-        [at(monkey,X), at(box,X), on(monkey,floor),(box,floor)],
+        [at(monkey,X), at(box,X), on(monkey,floor), on(box,floor)],
         [at(monkey,X), at(box,X)],
         [at(monkey,Y), at(box,Y)]).
 
