@@ -181,10 +181,14 @@ solve(State, Goal, Sofar, Plan):-
 
 solve(State, Goal, Plan, RPlan):-
         %add a check if State is a subset of Goal here 
-        subset(State,Goal),
+        subset(Goal, State).
         reverse(Plan,RPlan).
 
 %reverse(Plan,RPlan) - define this predicate which returns a reversed list
+
+reverse(X, Y):-
+        reverse(X, Y, []).
+
 reverse([], Z, Z).
 reverse([X|Y], Z, W):-
         reverse(Y, Z, [X| W]).
